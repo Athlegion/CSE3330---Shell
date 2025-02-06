@@ -20,5 +20,11 @@ int main()
 {
     char * command_str = (char *) malloc(MAX_INPUT_SIZE); // Allocate memory for command string
 
-    
+    while (1)
+    {
+        printf("msh> "); // Prompt for user input
+
+        // Read command from user - wait for user input, if user input is NULL, exit
+        while(!fgets(command_str, MAX_INPUT_SIZE, stdin));
+    }
 }
