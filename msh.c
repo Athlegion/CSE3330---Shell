@@ -12,11 +12,22 @@
 #include <errno.h>
 #include <signal.h>
 
-#define MAX_INPUT_SIZE 255 // Max input size
+#define MAX_INPUT_SIZE 255  // Max input size
+#define MAX_ARGS 10         // Max number of arguments
+#define MAX_HISTORY         // Max history log
 
-#define MAX_NUM_ARGUMENTS 5 // Max number of arguments
+/* FUNCTION PROTOTYPES */
+void msh();                     
+void get_input(char *input);                    // Displays prompt and gets user input / (input) - buffer to store input
+void parse_input(char* input, char** parsed);   // Parse input into tokens / (input) - input string / (parsed) - array of tokens
+void execute_cmd(char** parsed);                // Execute command / (parsed) - array of tokens
+void change_directory(char* path);              // Change directory / (path) - directory to change to
+void view_history();                            // Display history  
+void add_history(char* input);                  // Add command to history
+void show_pid_history();                        // Display history of pids
+void add_pid_history(int pid);                  // Add pid to history
 
-void msh(); // Function prototype
+/* GLOBAL VARIABLES */
 
 int main()
 {
@@ -39,7 +50,7 @@ void msh()
 
         if (strcmp(command_str, "exit\n") == 0)
         {
-            exit(0);                                           // Exit the shell
+          exit(0);                                      // Exit the shell
         }
 
         // If cd command is given, change directory
@@ -49,3 +60,4 @@ void msh()
         }
     }
 }
+
