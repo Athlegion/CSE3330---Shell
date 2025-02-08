@@ -17,9 +17,9 @@
 #define MAX_HISTORY         // Max history log
 
 /* FUNCTION PROTOTYPES */
-void msh();                     
-void get_input(char *input);                    // Displays prompt and gets user input / (input) - buffer to store input
-void parse_input(char* input, char** parsed);   // Parse input into tokens / (input) - input string / (parsed) - array of tokens
+void msh();                                     // Main shell function
+void get_input(char *input);                    // Displays prompt and gets user input / (input) - buffer to store input            DONE    
+void parse_input(char* input, char** parsed);   // Parse input into tokens / (input) - input string / (parsed) - array of tokens    DONE
 void execute_cmd(char** parsed);                // Execute command / (parsed) - array of tokens
 void change_directory(char* path);              // Change directory / (path) - directory to change to
 void view_history();                            // Display history  
@@ -37,27 +37,39 @@ int main()
 
 void msh()
 {
-    char * command_str = (char *) malloc(MAX_INPUT_SIZE); // Allocate memory for command string
+    char input[MAX_INPUT_SIZE]; // Buffer to store input
+    char *parsed[MAX_ARGS];     // Array of tokens
+    //char * command_str = (char *) malloc(MAX_INPUT_SIZE); // Allocate memory for command string
 
     while (1)
     {
-        printf("msh> "); // Prompt for user input
+        get_input(input); // Get user input
 
-        // Read command from user - wait for user input, if user input is NULL, exit
-        while(!fgets(command_str, MAX_INPUT_SIZE, stdin));
-
-        // If command given is supported, call the function and display the output
-
-        if (strcmp(command_str, "exit\n") == 0)
-        {
-          exit(0);                                      // Exit the shell
-        }
-
-        // If cd command is given, change directory
-        else if (strcmp(command_str, "cd\n") == 0)
-        {
-            chdir(getenv("HOME"));                              // Change directory to home directory
-        }
     }
+}
+
+/* Get user input */
+void get_input(char *input)
+{
+    printf("msh> "); // Display prompt
+    fgets(input, MAX_INPUT_SIZE, stdin); 
+
+    // Remove newline character from input
+    input[strcspn(input, "\n")] = '\0'; 
+}
+
+/* Parse input into tokens */
+void parse_input(char* input, char** parsed)
+{
+    int i = 0; 
+    char* token = strtok(input, " "); 
+
+    // Loop through input and tokenize
+    while(token != NULL && i < MAX_ARGS - 1)
+    {
+        parsed[i++] = token; // Store token in parsed array
+        token = strtok(NULL, " "); // Get next token
+    }
+    parsed[i] = NULL; // Set last element to NULL
 }
 
