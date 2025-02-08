@@ -16,6 +16,8 @@
 
 #define MAX_NUM_ARGUMENTS 5 // Max number of arguments
 
+void msh(); // Function prototype
+
 int main()
 {
     msh(); // Call msh function
@@ -32,5 +34,18 @@ void msh()
 
         // Read command from user - wait for user input, if user input is NULL, exit
         while(!fgets(command_str, MAX_INPUT_SIZE, stdin));
+
+        // If command given is supported, call the function and display the output
+
+        if (strcmp(command_str, "exit\n") == 0)
+        {
+            exit(0);                                           // Exit the shell
+        }
+
+        // If cd command is given, change directory
+        else if (strcmp(command_str, "cd\n") == 0)
+        {
+            chdir(getenv("HOME"));                              // Change directory to home directory
+        }
     }
 }
