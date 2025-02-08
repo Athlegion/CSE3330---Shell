@@ -18,6 +18,12 @@
 
 int main()
 {
+    msh(); // Call msh function
+    return 0; // Return 0
+}
+
+void msh()
+{
     char * command_str = (char *) malloc(MAX_INPUT_SIZE); // Allocate memory for command string
 
     while (1)
