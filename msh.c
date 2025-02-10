@@ -73,3 +73,26 @@ void parse_input(char* input, char** parsed)
     parsed[i] = NULL; // Set last element to NULL
 }
 
+/* Execute input command */
+void execute_cmd(char** parsed)
+{
+    pid_t pid = fork();             // Create child process
+
+    if(pid < 0)                     // Fork fails
+    {
+        printf("Command failed to execute\n");
+        return;
+    }
+    else if(pid == 0)
+    {
+        if(execvp(parsed[0], parsed) < 0) // Execute command
+        {
+            printf("Command not found\n");
+        }
+        exit(0); // Exit child process
+    }
+    else
+    {
+        wait(NULL); // Wait for child process to finish
+    }
+}
