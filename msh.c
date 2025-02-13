@@ -14,15 +14,15 @@ ID: 1001982627
 #include <errno.h>
 #include <signal.h>
 
-#define MAX_INPUT_SIZE 255  // Max input size
-#define MAX_ARGS 10         // Max number of arguments
-#define MAX_HISTORY 10         // Max history log
+#define MAX_INPUT_SIZE 255      // Max input size
+#define MAX_ARGS 10             // Max number of arguments
+#define MAX_HISTORY 20          // Max history log
 
 /* FUNCTION PROTOTYPES */
 void msh();                                     // Main shell function
-void get_input(char *input);                    // Displays prompt and gets user input / (input) - buffer to store input            DONE    
-void parse_input(char* input, char** parsed);   // Parse input into tokens / (input) - input string / (parsed) - array of tokens    DONE
-void execute_cmd(char** parsed);                // Execute command / (parsed) - array of tokens                                     DONE
+void get_input(char *input);                    // Displays prompt and gets user input / (input) - buffer to store input            
+void parse_input(char* input, char** parsed);   // Parse input into tokens / (input) - input string / (parsed) - array of tokens    
+void execute_cmd(char** parsed);                // Execute command / (parsed) - array of tokens                                     
 void change_directory(char* path);              // Change directory / (path) - directory to change to
 void view_history();                            // Display history  
 void add_history(char* input);                  // Add command to history
@@ -31,17 +31,19 @@ void add_pid_history(int pid);                  // Add pid to history
 void list_files();                              // List files in directory
 
 /* GLOBAL VARIABLES */
-char* history[MAX_HISTORY]; // Array to store history
-int pid_history[MAX_HISTORY]; // Array to store pid history
-int history_count = 0;
-int pid_count = 0;
+char* history[MAX_HISTORY];                     // Array to store history
+int pid_history[MAX_HISTORY];                   // Array to store pid history
+int history_count = 0;                          // History count set
+int pid_count = 0;                              // PID count set
 
+/* Main function */
 int main()
 {
     msh(); // Call msh function
     return 0; // Return 0
 }
 
+/* msh Function used to handle all paths and input choices made by the user */
 void msh()
 {
     char input[MAX_INPUT_SIZE]; // Buffer to store input
@@ -89,7 +91,11 @@ void msh()
 
 }
 
-/* Get user input */
+/*  
+    Get user input 
+    Takes in char input
+    No return - processes user input
+*/
 void get_input(char *input)
 {
     printf("msh> "); // Display prompt
@@ -99,7 +105,11 @@ void get_input(char *input)
     input[strcspn(input, "\n")] = '\0'; 
 }
 
-/* Parse input into tokens */
+/* 
+    Parse input into tokens 
+    Takes in char input and char parsed 
+    No return - parses user input
+*/
 void parse_input(char* input, char** parsed)
 {
     int i = 0; 
@@ -114,7 +124,11 @@ void parse_input(char* input, char** parsed)
     parsed[i] = NULL; // Set last element to NULL
 }
 
-/* Execute input command */
+/*
+    Execute command
+    Takes in char parsed
+    No return - executes input command
+ */
 void execute_cmd(char** parsed)
 {
     pid_t pid = fork();             // Create child process
@@ -140,7 +154,11 @@ void execute_cmd(char** parsed)
 }
 
 
-/* Change directory */
+/* 
+    Change directory 
+    Takes in char path
+    No return - changes directory
+*/
 void change_directory(char* path)
 {
     if(chdir(path) != 0) // Change directory
@@ -153,7 +171,11 @@ void change_directory(char* path)
     // printf("Current working directory: %s\n", cwd); // Display current working directory
 }
 
-/* Display command history */
+/*
+    Display history
+    No parameters
+    No return - displays history
+*/
 void view_history()
 {
     printf("Command history\n");
@@ -164,7 +186,11 @@ void view_history()
     }
 }
 
-/* Add command to history */
+/*
+    Add command to history
+    Takes in char input
+    No return - adds command to history
+*/
 void add_history(char* input)
 {
     if(history_count < MAX_HISTORY)
@@ -182,7 +208,11 @@ void add_history(char* input)
     }
 }
 
-/* Display history of pids */
+/*
+    Display pid history
+    No parameters
+    No return - displays pid history
+*/
 void show_pid_history()
 {
     printf("PID history\n");
@@ -199,7 +229,11 @@ void show_pid_history()
     }
 }
 
-/* Add pid to history */
+/* 
+    Add pid to history
+    Takes in int pid
+    No return - adds pid to history
+*/
 void add_pid_history(int pid)
 {
   if (pid_count < MAX_HISTORY)
@@ -216,6 +250,11 @@ void add_pid_history(int pid)
   }
 }
 
+/*
+    List files in directory
+    No parameters
+    No return - lists files in directory
+*/
 void list_files()
 {
     pid_t pid = fork();             // Create child process
@@ -239,6 +278,7 @@ void list_files()
     }
     else
     {
+        add_pid_history(pid); // Add pid to history
         wait(NULL); // Wait for child process to finish
     }
 }
