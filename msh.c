@@ -206,6 +206,11 @@ void add_history(char* input)
         }
         history[MAX_HISTORY - 1] = strdup(input); // Add input to history
     }
+
+    if (history_count > MAX_HISTORY)
+    {
+        history_count = MAX_HISTORY; // Set history count to max history
+    }
 }
 
 /*
