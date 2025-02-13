@@ -32,7 +32,7 @@ void list_files();                              // List files in directory
 
 /* GLOBAL VARIABLES */
 char* history[MAX_HISTORY];                     // Array to store history
-int pid_history[MAX_HISTORY];                   // Array to store pid history
+int pid_history[MAX_HISTORY] = {0};                   // Array to store pid history
 int history_count = 0;                          // History count set
 int pid_count = 0;                              // PID count set
 
@@ -164,11 +164,12 @@ void change_directory(char* path)
     if(chdir(path) != 0) // Change directory
     {
         printf("Directory not found\n");
-    }
-
+    }else
+    {
     char cwd[1024]; // Buffer to store current working directory
     getcwd(cwd, sizeof(cwd)); // Get current working directory
     // printf("Current working directory: %s\n", cwd); // Display current working directory
+    }
 }
 
 /*
@@ -220,7 +221,7 @@ void add_history(char* input)
 */
 void show_pid_history()
 {
-    printf("PID history\n");
+    printf("PID history (Total PIDs stored %d: \n", pid_count);
     
     if(pid_count == 0)
     {
